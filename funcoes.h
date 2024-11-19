@@ -10,8 +10,16 @@
 
 int len(char texto[], int tam);
 
-void inicializarVariaveis(int ***matriz, int *maior, int *esquinas, int *tempo, int *qtdEsquinas, int *localIncendio, char nomeArquivo[]);
+void inicializarVariaveis(int ***matriz, int *qtdEsquinas, int *localIncendio, char nomeArquivo[]);
 
-void imprimirMatriz(int **matriz, int maior);
+void imprimirMatriz(int **matriz, int qtdEsquinas);
+
+void realizarAlgoritmoErrado(int ***matriz, int *esquinas, int qtdEsquinas, int localIncendio);
+
+void realizarAlgoritmoCerto(int ***matriz, int *esquinas, int qtdEsquinas, int localIncendio);
+
+int vetorEstaVazio(int *v, int tam);
+
+int esquinaComMenorCusto(int *vetoresTempo, int *esquinas, int qtdEsquinas);
 
 # endif

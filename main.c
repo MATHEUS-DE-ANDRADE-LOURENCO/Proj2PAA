@@ -16,15 +16,27 @@ int main(int argc, char *argv[]) {
 
     // Inicializando os ponteiros corretamente
     int **matriz;
-    int maior = -1;
-    int esquinas = 0;
     int tempo = 0;
     int qtdEsquinas = 0;
     int localIncendio = 0;
 
     // Passando os endereços das variáveis para inicializar corretamente
-    inicializarVariaveis(&matriz, &maior, &esquinas, &tempo, &qtdEsquinas, &localIncendio, argv[1]);
+    inicializarVariaveis(&matriz, &qtdEsquinas, &localIncendio, argv[1]);
 
-    imprimirMatriz(matriz, maior);
+    printf("\nQuantidade de esquinas: %d", qtdEsquinas);
+    printf("\nLocal do incêndio: %d", localIncendio);
+    imprimirMatriz(matriz, qtdEsquinas);
+
+    int *esquinas;
+    esquinas = (int*) calloc(qtdEsquinas, sizeof(int));
+
+    for(int i = 1; i <= qtdEsquinas; i++) {
+        esquinas[i] = i;
+        printf("%d", esquinas[i]);
+    }
+
+    realizarAlgoritmoErrado(&matriz, esquinas, qtdEsquinas, localIncendio);
+
+
     return 0;
 }
