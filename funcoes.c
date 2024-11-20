@@ -56,20 +56,52 @@ void imprimirMatriz(int **matriz, int qtdEsquinas) {
     }
 }
 
+
+/*
+Iniciei a implementação desse algoritmo, mas não está funcionando. Estou tendo problemas na remoção do elemento do vetor.
+Como cada vez que a função de encontrar a esquina com o maior custo vai pegar o menor valor do vetor de custos, toda a hora
+ela irá pegar o mesmo valor.
+
+Possível solução: Salvar o menor custo da esquina em uma variável (não apenas qual é essa esquina) e deixar outro valor no vetor de custos, 
+acho que INT_MAX pode funcionar.
+*/
 void realizarAlgoritmoErrado(int ***matriz, int *esquinas, int qtdEsquinas, int localIncendio) {
     int vetoresTempo[TAM];
-    for(int i = 1; i <= qtdEsquinas; i++) {
-        vetoresTempo[i] = INT_MAX;
-    }
+    
+    // Preenche o vetor de tempos com infinito.  
+    for(int i = 1; i <= qtdEsquinas; i++) vetoresTempo[i] = INT_MAX;
 
+    printf("\n");
+
+    // Atribui 0 ao primeiro elemento do vetor (custo da esquina 1 para a esquina 1)
     vetoresTempo[1] = 0;
 
+    // Enquanto o vetor de esquinas não estiver vazio
     while(!vetorEstaVazio(esquinas, qtdEsquinas)) {
+        imprimeVetor(esquinas, qtdEsquinas);
+        printf("\n");
+        // Pega a esquina com o menor custo
         int esquinaMenorCusto = esquinaComMenorCusto(vetoresTempo, esquinas, qtdEsquinas);
+
+        // Remove essa esquina do vetor
+        esquinas[esquinaMenorCusto] = INT_MAX;
+
+        // Pra cada coluna que for possível se acessar através da esquina de menor custo
+        for(int col = 1; col <= qtdEsquinas; col++) {
+            // Se a coluna for diferente de 0 (for possível acessar a esquina pela esquina de menor custo)
+            if ((*matriz)[esquinaMenorCusto][col] != 0) {
+                if(vetoresTempo[col] > vetoresTempo[esquinaMenorCusto] + (*matriz)[esquinaMenorCusto][col]) {
+                    vetoresTempo[col] = vetoresTempo[esquinaMenorCusto] + (*matriz)[esquinaMenorCusto][col];
+                }
+            }
+        }
         
 
-    }   
+    }
 
+    for(int j = 1; j <= qtdEsquinas; j++) {
+        if(esquinas[j] != 0) printf("%d -> ", esquinas[j]);
+    }
 
 }
 
@@ -85,14 +117,20 @@ int vetorEstaVazio(int *v, int tam) {
 }
 
 int esquinaComMenorCusto(int *vetoresTempo, int *esquinas, int qtdEsquinas) {
-    int esquinaMenorCusto = 0;
-    int custoEsquinaMenorCusto = 0;
+    int esquinaMenorCusto;
+    int custoEsquinaMenorCusto = INT_MAX;
     for(int i = 1; i <= qtdEsquinas; i++) {
-       if(vetoresTempo[i] < custoEsquinaMenorCusto || esquinaMenorCusto == 0) {
+       if(vetoresTempo[i] < custoEsquinaMenorCusto) {
             custoEsquinaMenorCusto = vetoresTempo[i];
             esquinaMenorCusto = esquinas[i];
        }
     }
 
     return esquinaMenorCusto;
+}
+
+void imprimeVetor(int *v, int n) {
+    for(int i = 1; i <= n; i++) {
+        printf("%d ", v[i]);
+    }
 }

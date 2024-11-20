@@ -22,4 +22,6 @@ int vetorEstaVazio(int *v, int tam);
 
 int esquinaComMenorCusto(int *vetoresTempo, int *esquinas, int qtdEsquinas);
 
+void imprimeVetor(int *v, int n);
+
 # endif
