@@ -52,15 +52,41 @@ void inicializarVariaveis(int ***matriz, int *qtdEsquinas, int *localIncendio, c
     fclose(arq);
 }
 
-void imprimirMatriz(int **matriz, int qtdEsquinas) {
-    printf("\nMatriz de custos:\n");
-    for (int i = 0; i < qtdEsquinas; i++) { 
-        for (int j = 0; j < qtdEsquinas; j++) {
-            printf("%d\t", matriz[i][j]);
-        }
-        printf("\n");
+void imprimirTabela(int **matriz, int qtdEsquinas) {
+    printf("\n┌");
+    for (int i = 0; i < qtdEsquinas; i++) {
+        printf("───────┬");
     }
+    printf("───────┐\n");
+    
+    printf("│      │");
+    for (int i = 0; i < qtdEsquinas; i++) {
+        printf("  %3d  │", i + 1);
+    }
+    printf("\n├");
+    for (int i = 0; i < qtdEsquinas; i++) {
+        printf("───────┼");
+    }
+    printf("───────┤\n");
+
+    for (int i = 0; i < qtdEsquinas; i++) {
+        printf("│  %3d │", i + 1);
+        for (int j = 0; j < qtdEsquinas; j++) {
+            if (matriz[i][j] == INT_MAX) {
+                printf("   ∞   │");
+            } else {
+                printf("  %3d  │", matriz[i][j]);
+            }
+        }
+        printf("\n├");
+        for (int j = 0; j < qtdEsquinas; j++) {
+            printf("───────┼");
+        }
+        printf("───────┤\n");
+    }
+    printf("\n");
 }
+
 
 int esquinaComMenorCusto(int *T, int *E, int qtdEsquinas) {
     int menor;
