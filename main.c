@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 
     imprimirMatriz(matriz, qtdEsquinas);
 
-    realizaAlgoritmoErrado(&matriz, qtdEsquinas, localIncendio);
+    realizaAlgoritmoCerto(matriz, qtdEsquinas, localIncendio);
 
     return 0;
 }

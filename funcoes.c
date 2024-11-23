@@ -68,7 +68,7 @@ int esquinaComMenorCusto(int *T, int *E, int qtdEsquinas) {
     for(int i = 0; i < qtdEsquinas; i++){
         if(T[i] < tempoMenor && E[i] != -1) {
             // Se o tempo da esquina atual for menor e ainda não foi removida
-            menor = E[i]; 
+            menor = i; 
             tempoMenor = T[i];
         }
     }
@@ -76,33 +76,32 @@ int esquinaComMenorCusto(int *T, int *E, int qtdEsquinas) {
     return menor;
 }
 
-void realizaAlgoritmoErrado(int ***matriz, int qtdEsquinas, int localIncendio) {
-    // Estrutura auxiliar E que tem as esquinas da matriz
+void realizaAlgoritmoCerto(int **matriz, int qtdEsquinas, int localIncendio) {
     int *E = (int*) calloc(qtdEsquinas, sizeof(int));
+
     for(int i = 0; i < qtdEsquinas; i++) {
         E[i] = i;
     }
 
-    // Estrutura para armazenar o tempo em cada esquina.
     int *T = (int*) calloc(qtdEsquinas, sizeof(int));
-    // Para cada esquina e em E
-    for(int e = 0; e < qtdEsquinas; e++) {
-        T[E[e]] = INT_MAX;
+    for (int i = 0; i < qtdEsquinas; i++) {
+        T[i] = INT_MAX;
     }
 
-    int *P = (int*) calloc(qtdEsquinas, sizeof(int));
+    int *R = (int*) calloc(qtdEsquinas, sizeof(int));
+    for (int i = 0; i < qtdEsquinas; i++) {
+        R[i] = -1;
+    }
 
-    T[0] = 0; // Tempo para ir da primeira esquina para a primeira esquina é zero
+    T[0] = 0;
 
-    while(!vetorEstaVazio(E, qtdEsquinas)) {
+    while (!vetorEstaVazio(E, qtdEsquinas)) {
         int v = esquinaComMenorCusto(T, E, qtdEsquinas);
-        printf("Esquina com menor custo: %d", v);
-        // Removendo a solução
         E[v] = -1;
-        // Para cada esquina no mapa que pode ser acessada pela esquina v
-        for(int e = 0; e < qtdEsquinas; e++) {
-            if(T[e] > T[v] + (*matriz)[v][e] && E[e] != -1) {
-                T[e] = T[v] + (*matriz)[v][e];
+        for (int e = 0; e < qtdEsquinas; e++) {
+            if ((matriz)[v][e] != INT_MAX && T[e] > T[v] + (matriz)[v][e]) {
+                T[e] = T[v] + (matriz)[v][e];
+                R[e] = v;
             }
         }
     }
@@ -112,6 +111,30 @@ void realizaAlgoritmoErrado(int ***matriz, int qtdEsquinas, int localIncendio) {
     printf("\nTempo: ");
     imprimeVetor(T, qtdEsquinas);
 
+    printf("\nRota até a esquina %d: ", localIncendio);
+    imprimirRota(R, localIncendio - 1);
+    printf("\nTempo calculado para rota = %d min.\n", T[localIncendio - 1]);
+
+    free(E);
+    free(T);
+    free(R);
+
+}
+
+void imprimirRota(int *R, int destino) {
+    int caminho[100]; // Vetor auxiliar para armazenar a rota
+    int indice = 0;
+
+    // Percorre os predecessores até chegar ao início (-1)
+    while (destino != -1) {
+        caminho[indice++] = destino + 1; // Adiciona ao caminho ajustando o índice
+        destino = R[destino];           // Vai para o predecessor
+    }
+
+    // Imprime a rota em ordem inversa
+    for (int i = indice - 1; i >= 0; i--) {
+        printf("%d ", caminho[i]);
+    }
 }
 
 void realizarAlgoritmoCerto(int ***matriz, int *esquinas, int qtdEsquinas, int localIncendio) {
