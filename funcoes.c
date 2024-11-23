@@ -34,7 +34,7 @@ void inicializarVariaveis(int ***matriz, int *qtdEsquinas, int *localIncendio, c
 
     for(int i = 0; i < *qtdEsquinas; i++) {
         for(int j = 0; j < *qtdEsquinas; j++) {
-            (*matriz)[i][j] = -1;
+            (*matriz)[i][j] = INT_MAX;
         }
     }
 
@@ -96,6 +96,7 @@ void realizaAlgoritmoErrado(int ***matriz, int qtdEsquinas, int localIncendio) {
 
     while(!vetorEstaVazio(E, qtdEsquinas)) {
         int v = esquinaComMenorCusto(T, E, qtdEsquinas);
+        printf("Esquina com menor custo: %d", v);
         // Removendo a solução
         E[v] = -1;
         // Para cada esquina no mapa que pode ser acessada pela esquina v
