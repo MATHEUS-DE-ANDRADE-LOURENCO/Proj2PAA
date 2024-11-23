@@ -32,6 +32,12 @@ void inicializarVariaveis(int ***matriz, int *qtdEsquinas, int *localIncendio, c
         *qtdEsquinas = texto[0] - '0';
     }
 
+    for(int i = 0; i < *qtdEsquinas; i++) {
+        for(int j = 0; j < *qtdEsquinas; j++) {
+            (*matriz)[i][j] = -1;
+        }
+    }
+
     // Lê as conexões e atualiza a matriz
     while (fgets(texto, TAM, arq) != NULL) {
         if (len(texto, TAM) < 5) continue; // Ignorar linhas inválidas ou vazias
@@ -40,68 +46,70 @@ void inicializarVariaveis(int ***matriz, int *qtdEsquinas, int *localIncendio, c
         int coluna = texto[2] - '0';
         int custo = texto[4] - '0';
 
-        (*matriz)[linha][coluna] = custo;
+        (*matriz)[linha - 1][coluna - 1] = custo;
     }
-
+    
     fclose(arq);
 }
 
 void imprimirMatriz(int **matriz, int qtdEsquinas) {
     printf("\nMatriz de custos:\n");
-    for (int i = 1; i <= qtdEsquinas; i++) {  // Índices de 1 a maior
-        for (int j = 1; j <= qtdEsquinas; j++) {
+    for (int i = 0; i < qtdEsquinas; i++) { 
+        for (int j = 0; j < qtdEsquinas; j++) {
             printf("%d\t", matriz[i][j]);
         }
         printf("\n");
     }
 }
 
+int esquinaComMenorCusto(int *T, int *E, int qtdEsquinas) {
+    int menor;
+    int tempoMenor = INT_MAX;
+    for(int i = 0; i < qtdEsquinas; i++){
+        if(T[i] < tempoMenor && E[i] != -1) {
+            // Se o tempo da esquina atual for menor e ainda não foi removida
+            menor = E[i]; 
+            tempoMenor = T[i];
+        }
+    }
 
-/*
-Iniciei a implementação desse algoritmo, mas não está funcionando. Estou tendo problemas na remoção do elemento do vetor.
-Como cada vez que a função de encontrar a esquina com o maior custo vai pegar o menor valor do vetor de custos, toda a hora
-ela irá pegar o mesmo valor.
+    return menor;
+}
 
-Possível solução: Salvar o menor custo da esquina em uma variável (não apenas qual é essa esquina) e deixar outro valor no vetor de custos, 
-acho que INT_MAX pode funcionar.
-*/
-void realizarAlgoritmoErrado(int ***matriz, int *esquinas, int qtdEsquinas, int localIncendio) {
-    int vetoresTempo[TAM];
-    
-    // Preenche o vetor de tempos com infinito.  
-    for(int i = 1; i <= qtdEsquinas; i++) vetoresTempo[i] = INT_MAX;
+void realizaAlgoritmoErrado(int ***matriz, int qtdEsquinas, int localIncendio) {
+    // Estrutura auxiliar E que tem as esquinas da matriz
+    int *E = (int*) calloc(qtdEsquinas, sizeof(int));
+    for(int i = 0; i < qtdEsquinas; i++) {
+        E[i] = i;
+    }
 
-    printf("\n");
+    // Estrutura para armazenar o tempo em cada esquina.
+    int *T = (int*) calloc(qtdEsquinas, sizeof(int));
+    // Para cada esquina e em E
+    for(int e = 0; e < qtdEsquinas; e++) {
+        T[E[e]] = INT_MAX;
+    }
 
-    // Atribui 0 ao primeiro elemento do vetor (custo da esquina 1 para a esquina 1)
-    vetoresTempo[1] = 0;
+    int *P = (int*) calloc(qtdEsquinas, sizeof(int));
 
-    // Enquanto o vetor de esquinas não estiver vazio
-    while(!vetorEstaVazio(esquinas, qtdEsquinas)) {
-        imprimeVetor(esquinas, qtdEsquinas);
-        printf("\n");
-        // Pega a esquina com o menor custo
-        int esquinaMenorCusto = esquinaComMenorCusto(vetoresTempo, esquinas, qtdEsquinas);
+    T[0] = 0; // Tempo para ir da primeira esquina para a primeira esquina é zero
 
-        // Remove essa esquina do vetor
-        esquinas[esquinaMenorCusto] = INT_MAX;
-
-        // Pra cada coluna que for possível se acessar através da esquina de menor custo
-        for(int col = 1; col <= qtdEsquinas; col++) {
-            // Se a coluna for diferente de 0 (for possível acessar a esquina pela esquina de menor custo)
-            if ((*matriz)[esquinaMenorCusto][col] != 0) {
-                if(vetoresTempo[col] > vetoresTempo[esquinaMenorCusto] + (*matriz)[esquinaMenorCusto][col]) {
-                    vetoresTempo[col] = vetoresTempo[esquinaMenorCusto] + (*matriz)[esquinaMenorCusto][col];
-                }
+    while(!vetorEstaVazio(E, qtdEsquinas)) {
+        int v = esquinaComMenorCusto(T, E, qtdEsquinas);
+        // Removendo a solução
+        E[v] = -1;
+        // Para cada esquina no mapa que pode ser acessada pela esquina v
+        for(int e = 0; e < qtdEsquinas; e++) {
+            if(T[e] > T[v] + (*matriz)[v][e] && E[e] != -1) {
+                T[e] = T[v] + (*matriz)[v][e];
             }
         }
-        
-
     }
 
-    for(int j = 1; j <= qtdEsquinas; j++) {
-        if(esquinas[j] != 0) printf("%d -> ", esquinas[j]);
-    }
+    printf("\n\nEsquinas: ");
+    imprimeVetor(E, qtdEsquinas);
+    printf("\nTempo: ");
+    imprimeVetor(T, qtdEsquinas);
 
 }
 
@@ -110,27 +118,14 @@ void realizarAlgoritmoCerto(int ***matriz, int *esquinas, int qtdEsquinas, int l
 }
 
 int vetorEstaVazio(int *v, int tam) {
-    for(int i = 1; i <= tam; i++) 
-        if(v[i] != 0) return 0;
+    for(int i = 0; i < tam; i++) 
+        if(v[i] != -1) return 0;
     
     return 1;
 }
 
-int esquinaComMenorCusto(int *vetoresTempo, int *esquinas, int qtdEsquinas) {
-    int esquinaMenorCusto;
-    int custoEsquinaMenorCusto = INT_MAX;
-    for(int i = 1; i <= qtdEsquinas; i++) {
-       if(vetoresTempo[i] < custoEsquinaMenorCusto) {
-            custoEsquinaMenorCusto = vetoresTempo[i];
-            esquinaMenorCusto = esquinas[i];
-       }
-    }
-
-    return esquinaMenorCusto;
-}
-
 void imprimeVetor(int *v, int n) {
-    for(int i = 1; i <= n; i++) {
+    for(int i = 0; i < n; i++) {
         printf("%d ", v[i]);
     }
 }

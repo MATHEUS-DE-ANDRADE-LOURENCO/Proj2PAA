@@ -25,21 +25,10 @@ int main(int argc, char *argv[]) {
 
     printf("\nQuantidade de esquinas: %d", qtdEsquinas);
     printf("\nLocal do incêndio: %d", localIncendio);
+
     imprimirMatriz(matriz, qtdEsquinas);
 
-    int *esquinas;
-    esquinas = (int*) calloc(qtdEsquinas + 1, sizeof(int));
-
-    for(int i = 1; i <= qtdEsquinas; i++) {
-        esquinas[i] = i;
-    }
-
-    imprimeVetor(esquinas, qtdEsquinas);
-
-    int vetorTempo[7] = {0, 0, INT_MAX, INT_MAX, INT_MAX, INT_MAX, INT_MAX};
-
-    realizarAlgoritmoErrado(&matriz, esquinas, qtdEsquinas, localIncendio);
-
+    realizaAlgoritmoErrado(&matriz, qtdEsquinas, localIncendio);
 
     return 0;
 }

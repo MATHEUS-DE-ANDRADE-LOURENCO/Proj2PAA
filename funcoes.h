@@ -14,13 +14,13 @@ void inicializarVariaveis(int ***matriz, int *qtdEsquinas, int *localIncendio, c
 
 void imprimirMatriz(int **matriz, int qtdEsquinas);
 
-void realizarAlgoritmoErrado(int ***matriz, int *esquinas, int qtdEsquinas, int localIncendio);
+int esquinaComMenorCusto(int *T, int *E, int qtdEsquinas);
+
+void realizaAlgoritmoErrado(int ***matriz, int qtdEsquinas, int localIncendio);
 
 void realizarAlgoritmoCerto(int ***matriz, int *esquinas, int qtdEsquinas, int localIncendio);
 
 int vetorEstaVazio(int *v, int tam);
-
-int esquinaComMenorCusto(int *vetoresTempo, int *esquinas, int qtdEsquinas);
 
 void imprimeVetor(int *v, int n);
 
