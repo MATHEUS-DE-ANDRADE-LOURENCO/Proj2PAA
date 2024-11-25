@@ -36,3 +36,6 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
+
+//ChatGPT nos auxiliou na criação da tabela (em asciiz) na hora do PRINT e na formatação do README.md
