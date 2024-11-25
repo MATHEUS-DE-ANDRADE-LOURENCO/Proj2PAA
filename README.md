@@ -1,5 +1,7 @@
 # Proj2PAA
 
+##link do vídeo de apresentação: https://youtu.be/hpbgLyy1Ug8?feature=shared
+
 Projeto desenvolvido como parte do curso de **Projeto e Análise de Algoritmos (PAA)**.
 
 ## Integrantes do Grupo
