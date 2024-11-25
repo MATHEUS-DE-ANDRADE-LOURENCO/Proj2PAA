@@ -1,3 +1,7 @@
+//Felipe Ujvari Gasparino de Sousa - 10418415
+//Matheus Lourenço - 10419691
+//Pedro Souza Zequi - 10419805
+
 #include "funcoes.h"
 
 int len(char texto[], int tam) {
