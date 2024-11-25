@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     printf("\nQuantidade de esquinas: %d", qtdEsquinas);
     printf("\nLocal do incêndio: %d", localIncendio);
 
-    imprimirMatriz(matriz, qtdEsquinas);
+    imprimirTabela(matriz, qtdEsquinas);
 
     realizaAlgoritmoCerto(matriz, qtdEsquinas, localIncendio);
 
